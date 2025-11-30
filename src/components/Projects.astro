@@ -59,7 +59,7 @@ const PROJECTS = [
             {title}
           </h3>
           <p class="text-lg mb-4 text-pretty">{description}</p>
-          <ul class="flex gap-x-2 flex-row mb-4">
+          <ul class="flex gap-x-2 flex-row flex-wrap gap-y-2 mb-4">
             {tags.map((tag) => (
               <li>
                 <span
@@ -73,7 +73,7 @@ const PROJECTS = [
           </ul>
           <img
             loading="lazy"
-            class="rounded shadow-2xl shadow-white/10 aspect-video"
+            class="w-full rounded shadow-2xl shadow-white/10 aspect-video"
             src={image}
             alt={`Captura de pantalla del proyecto ${image}`}
           />
