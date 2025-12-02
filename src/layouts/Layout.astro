@@ -22,12 +22,13 @@ const { description, title } = Astro.props
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
     <script>
-      // Anti-flash de tema: aplicar clase 'dark' lo antes posible
+      // Anti-flash de tema: forzar modo oscuro por defecto
       (function(){
         try{
           const saved = localStorage.getItem('theme');
-          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-          if(saved === 'dark' || (!saved && prefersDark)){
+          // Si el usuario eligió explícitamente 'light', respetamos eso.
+          // En cualquier otro caso (sin valor o 'dark'), usamos dark por defecto.
+          if (saved !== 'light') {
             document.documentElement.classList.add('dark');
           }
         }catch(_){}

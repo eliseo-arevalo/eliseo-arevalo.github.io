@@ -14,6 +14,7 @@ import ProfileCheck from "@/components/icons/ProfileCheck.astro"
 import Projects from "@/components/Projects.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import SocialPill from "@/components/SocialPill.astro"
+import GradualBlur from "@/components/GradualBlur.tsx"
 ---
 
 <Layout
@@ -39,16 +40,9 @@ import SocialPill from "@/components/SocialPill.astro"
 						</span>
 					</div>
 			<h1
-				class="text-gray-900 dark:text-white text-3xl md:text-4xl lg:text-5xl font-bold flex flex-row gap-x-4 pb-6 mt-3"
+				class="text-gray-900 dark:text-white text-3xl md:text-4xl lg:text-5xl font-bold flex flex-row gap-x-4 pb-4 mt-3"
 			>
-				Eliseo Arévalo <a
-					href="https://www.linkedin.com/company/serfinsa/mycompany/"
-					target="_blank"
-					rel="noopener"
-					class="flex justify-center items-center hover:scale-105 transition"
-				>
-					<Badge>develiseo</Badge>
-				</a>
+				Eliseo Arévalo
 			</h1>
 			<h2
 				class="text-xl lg:text-xl text-balance max-w-[700px] text-black dark:text-white leading-relaxed"
@@ -57,8 +51,7 @@ import SocialPill from "@/components/SocialPill.astro"
 				<span class="text-yellow-800 dark:text-yellow-200 font-semibold">
 					increíble,
 				</span>
-				 ¿por qué 
-					conformarte con menos?
+				<span> ¿por qué conformarte con menos? Es simple: da siempre el máximo; es todo o nada.</span>
 			</h2>
 			<nav class="flex gap-4 mt-8 flex-wrap">
 				<SocialPill href="http://linkedin.com/in/eliseo-arevalo">
@@ -104,6 +97,21 @@ import SocialPill from "@/components/SocialPill.astro"
 			<Projects />
 		</SectionContainer>
 
+		<div class="hidden dark:block">
+			<GradualBlur
+				client:only="react"
+				target="page"
+				position="bottom"
+				height="8rem"
+				strength={2}
+				divCount={7}
+				curve="bezier"
+				exponential={false}
+				opacity={0.7}
+				preset="page-footer"
+			/>
+		</div>
+
 		<SectionContainer id="sobre-mi">
 			<h2
 				class="text-3xl font-semibold mb-6 flex gap-x-3 items-center text-black/80 dark:text-white/80"
@@ -135,8 +143,7 @@ import SocialPill from "@/components/SocialPill.astro"
 						src="https://open.spotify.com/embed/track/0pxPNTroZcxXA0w6IDgMQJ?utm_source=generator&theme=0" 
 						width="100%" 
 						height="152" 
-						frameBorder="0" 
-						allowfullscreen="" 
+						frameborder="0"
 						allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
 						loading="lazy"
 						style="border: none; border-radius: 0; background: transparent;"
@@ -175,7 +182,7 @@ import SocialPill from "@/components/SocialPill.astro"
 		
 		// Cambiar tema del widget de Spotify según el tema del sitio
 		function updateSpotifyTheme() {
-			const iframe = document.querySelector('iframe[src*="spotify.com"]');
+			const iframe = document.querySelector<HTMLIFrameElement>('iframe[src*="spotify.com"]');
 			if (!iframe) return;
 			
 			const isDark = document.documentElement.classList.contains('dark');

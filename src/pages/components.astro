@@ -3,6 +3,7 @@ import Badge from "@/components/Badge.astro"
 import SectionContainer from "@/components/SectionContainer.astro"
 import SocialPill from "@/components/SocialPill.astro"
 import LinkedInIcon from "@/components/icons/LinkedIn.astro"
+import GradualBlur from "@/components/GradualBlur.tsx"
 
 import Layout from "@/layouts/Layout.astro"
 ---
@@ -27,6 +28,36 @@ import Layout from "@/layouts/Layout.astro"
           LinkedIn
         </SocialPill>
       </div>
+    </article>
+
+    <article class="mb-10">
+      <h1 class="mb-4 text-xl font-semibold">&lt;GradualBlur /&gt;</h1>
+      
+      <section style="position: relative; height: 500px; overflow: hidden; border-radius: 8px; border: 1px solid rgba(0,0,0,0.1);">
+        <div style="height: 100%; overflow-y: auto; padding: 6rem 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <div style="color: white; font-size: 1.5rem; line-height: 1.8;">
+            <p>Este es un ejemplo del efecto de desenfoque gradual.</p>
+            <p>Puedes hacer scroll para ver cómo el desenfoque aparece en la parte inferior.</p>
+            <p>El componente GradualBlur crea un efecto visual elegante que se puede usar en headers, footers, o cualquier sección que necesite un fade suave.</p>
+            <p style="margin-top: 2rem;">Sigue desplazándote hacia abajo para ver más contenido...</p>
+            <p>El efecto de blur se aplica gradualmente desde el borde.</p>
+            <p>Puedes configurar la posición (top, bottom, left, right), la intensidad, y muchas otras propiedades.</p>
+            <p style="margin-top: 2rem;">Este es un ejemplo con posición "bottom" y curva "bezier".</p>
+          </div>
+        </div>
+
+        <GradualBlur
+          client:only="react"
+          target="parent"
+          position="bottom"
+          height="6rem"
+          strength={2}
+          divCount={5}
+          curve="bezier"
+          exponential={true}
+          opacity={1}
+        />
+      </section>
     </article>
   </SectionContainer>
 </Layout>

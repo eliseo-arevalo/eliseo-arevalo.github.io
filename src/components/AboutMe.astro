@@ -2,24 +2,27 @@
 // create variables for age and years of experience
 const date = new Date();
 const age = date.getFullYear() - 2004;
-const experience = date.getFullYear() - 2021;
+const experience = date.getFullYear() - 2022;
 ---
 <section class="flex flex-col md:flex-row gap-8 justify-center items-center">
   <div
-    class="[&>p]:mb-4 [&>p>strong]:text-yellow-400 [&>p>strong]:font-semibold text-pretty order-2 md:order-1"
+    class="[&>p]:mb-4 [&_*strong]:text-yellow-400 [&_*strong]:font-semibold text-pretty order-2 md:order-1"
   >
     <p>
-      Mi nombre es Eliseo Francisco Arévalo, tengo <strong>{ age } años</strong> y
-      hace <strong>{ experience } años soy programador, actualmente trabajo como desarrollador.
-      </strong
-      >
+      Soy Eliseo Francisco Arévalo, desarrollador de software de <strong>{ age } años</strong> con
+      cerca de <strong>{ experience } años de experiencia</strong> construyendo aplicaciones web.
     </p>
 
-    <p>
-      Como programador me encanta mi trabajo y estoy en constante  <strong
-        > aprendizaje. <em class="italic"></em></strong>
-        Actualmente estoy disponible para colaborar en proyectos interesantes, contactame.
-    </p>
+    <p>Al trabajar en proyectos, tengo algunas prioridades claras:</p>
+    <ul class="list-disc pl-5 space-y-1 text-sm md:text-base">
+      <li><strong>Hazlo simple o no lo hagas.</strong></li>
+      <li><strong>Borra sin miedo el código inútil.</strong></li>
+      <li><strong>Si necesita muchos comentarios, reházlo.</strong></li>
+    </ul>
   </div>
-  <img src="/eliseo.jpg" alt="Eliseo Arévalo" class="rounded-full w-40 h-40 sm:w-56 sm:h-56 md:w-64 md:h-64 order-1 md:order-2" />
+  <img
+    src="/eliseo.jpg"
+    alt="Eliseo Arévalo"
+    class="rounded-full w-28 h-28 sm:w-32 sm:h-32 md:w-40 md:h-40 order-1 md:order-2 object-cover"
+  />
 </section>

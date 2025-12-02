@@ -71,12 +71,14 @@ const PROJECTS = [
               </li>
             ))}
           </ul>
-          <img
-            loading="lazy"
-            class="w-full rounded shadow-2xl shadow-white/10 aspect-video"
-            src={image}
-            alt={`Captura de pantalla del proyecto ${image}`}
-          />
+          <div class="relative rounded overflow-hidden shadow-2xl shadow-white/10">
+            <img
+              loading="lazy"
+              class="w-full aspect-video object-cover"
+              src={image}
+              alt={`Captura de pantalla del proyecto ${image}`}
+            />
+          </div>
           <footer class="flex gap-x-4 items-end justify-start mt-4">
             {github && (
               <LinkButton href={github}>
