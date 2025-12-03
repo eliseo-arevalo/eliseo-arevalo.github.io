@@ -179,4 +179,113 @@ const { description, title } = Astro.props
     html { scroll-behavior: auto; }
     body { transition: none; }
   }
+
+  /* Estilos para impresión/PDF - Aplicar fondo completo con márgenes para evitar cortes */
+  @media print {
+    /* Agregar márgenes para evitar cortes abruptos entre páginas */
+    @page {
+      margin: 1.5cm 0.5cm;
+      size: auto;
+    }
+
+    /* Ocultar header, footer y navegación completamente */
+    header,
+    header *,
+    header nav,
+    header nav *,
+    header a,
+    header button,
+    header svg,
+    #theme-toggle,
+    #theme-toggle-light-icon,
+    #theme-toggle-dark-icon,
+    footer,
+    footer *,
+    nav,
+    nav *,
+    .print\\:hidden,
+    [class*="print:hidden"] {
+      display: none !important;
+      visibility: hidden !important;
+      opacity: 0 !important;
+      height: 0 !important;
+      width: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    /* Ocultar efectos de gradiente/blur al imprimir */
+    [data-gradual-blur],
+    [class*="GradualBlur"],
+    .gradual-blur,
+    .gradual-blur-page,
+    .gradual-blur-parent {
+      display: none !important;
+      visibility: hidden !important;
+    }
+
+    /* Ocultar fondo decorativo al imprimir */
+    .bg-decor {
+      display: none !important;
+    }
+
+    /* Forzar modo claro al imprimir: fondo blanco y texto negro */
+    html,
+    html.dark {
+      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+      background-color: white !important;
+    }
+
+    body,
+    html.dark body {
+      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+      background-color: white !important;
+      color: #111111 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      min-height: 100vh !important;
+    }
+
+    /* Forzar todos los textos a negro al imprimir */
+    * {
+      color: #111111 !important;
+    }
+
+    /* Excepción: mantener colores naturales del SVG */
+    svg,
+    svg * {
+      color: inherit !important;
+    }
+
+    /* Asegurar que main y article también tengan el fondo */
+    main,
+    article {
+      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+      background: transparent !important;
+    }
+
+    /* Asegurar que los SVGs se impriman bien */
+    svg {
+      max-width: 100% !important;
+      height: auto !important;
+      page-break-inside: avoid;
+      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+    }
+
+    /* Evitar saltos de página dentro de elementos importantes */
+    [data-excal] {
+      page-break-inside: avoid;
+    }
+
+    /* Asegurar que todos los elementos respeten el fondo */
+    * {
+      print-color-adjust: exact !important;
+      -webkit-print-color-adjust: exact !important;
+    }
+  }
 </style>
