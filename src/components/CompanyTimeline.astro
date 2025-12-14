@@ -1,6 +1,5 @@
 ---
 import ExperienceItem from "./ExperienceItem.astro"
-import LinkButton from "./LinkButton.astro";
 
 interface Role {
   title: string;
@@ -19,42 +18,81 @@ interface Props {
 
 const { company, logo, duration, roles, companyLink } = Astro.props;
 const hasMultipleRoles = roles.length > 1;
+
+// Función para extraer la fecha inicial y final de un string de fecha
+function extractDates(dateString: string): { start: string; end: string } {
+  const parts = dateString.split(' - ');
+  return {
+    start: parts[0]?.trim() || '',
+    end: parts[1]?.trim() || ''
+  };
+}
+
+// Calcular el rango de fechas de la empresa
+let companyDateRange = '';
+if (hasMultipleRoles) {
+  // Para múltiples puestos: desde el inicio del último puesto hasta el final del primer puesto
+  const firstRole = roles[0];
+  const lastRole = roles[roles.length - 1];
+  const firstDates = extractDates(firstRole.date);
+  const lastDates = extractDates(lastRole.date);
+  
+  // El inicio es la fecha inicial del último puesto (el más antiguo)
+  // El final es la fecha final del primer puesto (el más reciente)
+  companyDateRange = `${lastDates.start} - ${firstDates.end}`;
+} else {
+  // Para un solo puesto: usar la fecha del puesto
+  companyDateRange = roles[0].date;
+}
 ---
 
 <div>
   <div class="flex items-center mb-4">
-    {logo && <img src={logo} alt={`${company} logo`} class="w-12 h-12 mr-4" />}
-    <div>
-      <h3 class="text-xl font-bold text-yellow-800 dark:text-yellow-200">{company}</h3>
-      <p class="text-sm text-gray-600 dark:text-gray-400">{duration}</p>
-    </div>
+    {companyLink ? (
+      <>
+        {logo && (
+          <a
+            href={companyLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mr-4 hover:opacity-80 transition-opacity"
+          >
+            <img src={logo} alt={`${company} logo`} class="w-12 h-12" />
+          </a>
+        )}
+        <div>
+          <a
+            href={companyLink}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-xl font-bold text-yellow-800 dark:text-yellow-200 hover:text-yellow-600 dark:hover:text-yellow-400 transition-colors inline-block"
+          >
+            {company}
+          </a>
+          <p class="text-sm text-gray-600 dark:text-gray-400">{companyDateRange}</p>
+        </div>
+      </>
+    ) : (
+      <>
+        {logo && <img src={logo} alt={`${company} logo`} class="w-12 h-12 mr-4" />}
+        <div>
+          <h3 class="text-xl font-bold text-yellow-800 dark:text-yellow-200">{company}</h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400">{companyDateRange}</p>
+        </div>
+      </>
+    )}
   </div>
-  <ol class="relative border-s border-gray-200 ml-4">
-    {roles.map(role => (
-      <li class="mb-10 ms-4">
-        <ExperienceItem {...role} employer={company} />
-      </li>
-    ))}
-  </ol>
-  {companyLink && (
-    <div class="mt-6 ml-4">
-      <LinkButton href={companyLink}>
-        Saber más sobre {company}
-        <svg
-          class="w-3 h-3 ms-2 rtl:rotate-180"
-          aria-hidden="true"
-          fill="none"
-          viewBox="0 0 14 10"
-        >
-          <path
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M1 5h12m0 0L9 1m4 4L9 9"
-          />
-        </svg>
-      </LinkButton>
+  {hasMultipleRoles ? (
+    <ol class="relative border-s border-gray-200 ml-4">
+      {roles.map(role => (
+        <li class="mb-6 ms-4">
+          <ExperienceItem {...role} employer={company} showDate={true} />
+        </li>
+      ))}
+    </ol>
+  ) : (
+    <div class="ml-4">
+      <ExperienceItem {...roles[0]} employer={company} showDate={false} />
     </div>
   )}
 </div>

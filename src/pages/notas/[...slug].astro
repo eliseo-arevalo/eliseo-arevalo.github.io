@@ -93,7 +93,7 @@ if (kind === 'mdx') {
   {kind === 'mdx' ? (
     <SectionContainer class="mt-16">
       <article class="prose dark:prose-invert lg:prose-lg">
-        <ExportButtons client:only="react" title={title} />
+        <!-- <ExportButtons client:only="react" title={title} /> -->
         <h1>{title}</h1>
         {pubDate && (
           <div class="text-gray-500 mb-8">
@@ -108,7 +108,7 @@ if (kind === 'mdx') {
   ) : (
     <SectionContainer class="mt-16">
       <article>
-        <ExportButtons client:only="react" title={title} excalId="main-excal" />
+        <!-- <ExportButtons client:only="react" title={title} excalId="main-excal" /> -->
         {articleData && (
           <div style={`view-transition-name: note-${String((Astro as any).params?.slug || '').toLowerCase().replace(/[^a-z0-9_-]/g,'-')}`}>
             <ExcalidrawArticle client:only="react" articleData={articleData} />
