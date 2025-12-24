@@ -179,7 +179,7 @@ export default function Model3D({
   autoRotateSpeed = 1 
 }: Model3DProps) {
   return (
-    <div className={`${className} rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 relative`} style={{ width: '100%', height: '100%', position: 'relative' }}>
+    <div className={`${className} rounded-full overflow-hidden relative`} style={{ width: '100%', height: '100%', position: 'relative', background: 'transparent' }}>
       <Canvas
         camera={{ position: [0, 0, 4], fov: 25, near: 0.1, far: 1000 }}
         gl={{ antialias: true, alpha: true }}
