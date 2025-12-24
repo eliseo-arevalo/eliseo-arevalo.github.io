@@ -92,6 +92,9 @@ const { description, title } = Astro.props
         }
 
         async function load(url: string){
+          // Resetear scroll inmediatamente antes de cargar el contenido
+          window.scrollTo({ top: 0, behavior: 'instant' });
+          
           const res = await fetch(url, { headers: { 'X-Requested-With': 'view-transition' } });
           const html = await res.text();
           const doc = new DOMParser().parseFromString(html, 'text/html');
@@ -104,6 +107,9 @@ const { description, title } = Astro.props
           reviveScripts(current);
           // Rehidratar islas de Astro tras el swap para que componentes client-only/visible se monten
           try { window.dispatchEvent(new Event('astro:page-load')); } catch {}
+          
+          // Asegurar que el scroll esté en 0 después de cargar
+          window.scrollTo({ top: 0, behavior: 'instant' });
         }
 
         addEventListener('click', (e: MouseEvent) => {
@@ -115,12 +121,14 @@ const { description, title } = Astro.props
           if (supportsVT){
             (document as any).startViewTransition(() => load(url.toString())).finished.then(() => {
               history.pushState(null, '', url.toString());
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              // El scroll ya se reseteó en load(), pero aseguramos aquí también
+              window.scrollTo({ top: 0, behavior: 'instant' });
             }).catch(() => location.href = url.toString());
           } else {
             load(url.toString()).then(() => {
               history.pushState(null, '', url.toString());
-              window.scrollTo({ top: 0, behavior: 'smooth' });
+              // El scroll ya se reseteó en load(), pero aseguramos aquí también
+              window.scrollTo({ top: 0, behavior: 'instant' });
             }).catch(() => location.href = url.toString());
           }
         });
@@ -128,9 +136,13 @@ const { description, title } = Astro.props
         addEventListener('popstate', () => {
           const url = location.href;
           if (supportsVT){
-            (document as any).startViewTransition(() => load(url));
+            (document as any).startViewTransition(() => load(url)).finished.then(() => {
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            });
           } else {
-            load(url);
+            load(url).then(() => {
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            });
           }
         });
       })();

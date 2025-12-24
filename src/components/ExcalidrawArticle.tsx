@@ -519,7 +519,11 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
             // Evitar duplicados
             if (element.hasAttribute('data-image-clickable')) return;
             
-            element.style.cursor = 'pointer';
+            // Cast a SVGElement o HTMLElement para acceder a style
+            const styledElement = element as SVGElement | HTMLElement;
+            if ('style' in styledElement) {
+              styledElement.style.cursor = 'pointer';
+            }
             element.setAttribute('data-image-clickable', 'true');
             element.setAttribute('data-file-id', imageInfo.fileId);
             
@@ -989,7 +993,7 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
                 src={selectedImage.dataUrl}
                 alt={selectedImage.fileName || 'Imagen de Excalidraw'}
                 className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
-                style={{ imageRendering: 'high-quality' }}
+                style={{ imageRendering: 'auto' }}
               />
             ) : (
               <div className="bg-gray-800 text-white p-8 rounded-lg">

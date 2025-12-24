@@ -16,11 +16,14 @@
     "@astrojs/tailwind": "6.0.2",
     "@excalidraw/excalidraw": "^0.18.0",
     "@fontsource-variable/onest": "5.0.2",
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.4.2",
     "astro": "5.9.3",
     "mathjs": "^15.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "tailwindcss": "3.4.1",
+    "three": "^0.182.0",
     "typescript": "5.3.3"
   },
   "devDependencies": {
