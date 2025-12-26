@@ -105,6 +105,7 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
   const articleDataRef = useRef(articleData);
   const [identifiedImages, setIdentifiedImages] = useState<ImageInfo[]>([]);
   const [selectedImage, setSelectedImage] = useState<ImageInfo | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const selectedImageRef = useRef<ImageInfo | null>(null);
   const isModalOpenRef = useRef<boolean>(false);
@@ -334,185 +335,8 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
             }
           });
 
-          // Función para agregar ícono de expandir a una imagen
-          const addExpandIcon = (imageElement: Element, imageInfo: ImageInfo, useElement?: Element) => {
-            // Verificar si ya tiene ícono
-            const existingIcon = svgEl.querySelector(`.excal-image-expand-icon[data-file-id="${imageInfo.fileId}"]`);
-            if (existingIcon) {
-              if (process.env.NODE_ENV === 'development') {
-                console.log('[ExcalidrawArticle] Ícono ya existe para:', imageInfo.fileId);
-              }
-              return;
-            }
-
-            try {
-              // Obtener las dimensiones y posición de la imagen
-              let x = 0, y = 0, width = 100, height = 100;
-              
-              // Si hay un elemento <use>, usar sus coordenadas (son las reales)
-              if (useElement) {
-                const useX = useElement.getAttribute('x');
-                const useY = useElement.getAttribute('y');
-                const useWidth = useElement.getAttribute('width');
-                const useHeight = useElement.getAttribute('height');
-                
-                if (useX) x = parseFloat(useX) || 0;
-                if (useY) y = parseFloat(useY) || 0;
-                if (useWidth) width = parseFloat(useWidth) || 100;
-                if (useHeight) height = parseFloat(useHeight) || 100;
-                
-                if (process.env.NODE_ENV === 'development') {
-                  console.log('[ExcalidrawArticle] Usando coordenadas de <use>:', { x, y, width, height });
-                }
-              } else {
-                // Intentar obtener del atributo del elemento image
-                const xAttr = imageElement.getAttribute('x');
-                const yAttr = imageElement.getAttribute('y');
-                const widthAttr = imageElement.getAttribute('width');
-                const heightAttr = imageElement.getAttribute('height');
-                
-                if (xAttr) x = parseFloat(xAttr) || 0;
-                if (yAttr) y = parseFloat(yAttr) || 0;
-                if (widthAttr) width = parseFloat(widthAttr) || 100;
-                if (heightAttr) height = parseFloat(heightAttr) || 100;
-                
-                // Si no hay atributos, intentar getBBox después de un pequeño delay
-                if ((!xAttr || !yAttr || !widthAttr || !heightAttr)) {
-                  // Usar las coordenadas de imageInfo como fallback
-                  x = imageInfo.x || 0;
-                  y = imageInfo.y || 0;
-                  width = imageInfo.width || 100;
-                  height = imageInfo.height || 100;
-                  
-                  if (process.env.NODE_ENV === 'development') {
-                    console.log('[ExcalidrawArticle] Usando coordenadas de imageInfo:', { x, y, width, height });
-                  }
-                }
-              }
-              
-              // Intentar getBBox como último recurso (después de que el SVG se renderice)
-              if ((x === 0 && y === 0) || width === 100 || height === 100) {
-                setTimeout(() => {
-                  try {
-                    const bbox = (imageElement as any).getBBox?.();
-                    if (bbox && bbox.width > 0 && bbox.height > 0) {
-                      x = bbox.x || x;
-                      y = bbox.y || y;
-                      width = bbox.width || width;
-                      height = bbox.height || height;
-                      if (process.env.NODE_ENV === 'development') {
-                        console.log('[ExcalidrawArticle] Coordenadas actualizadas desde getBBox:', { x, y, width, height });
-                      }
-                      // Re-crear el ícono con las coordenadas correctas
-                      addExpandIcon(imageElement, imageInfo, useElement);
-                    }
-                  } catch (e) {
-                    // getBBox puede fallar
-                  }
-                }, 100);
-              }
-
-              if (process.env.NODE_ENV === 'development') {
-                console.log('[ExcalidrawArticle] Agregando ícono a imagen:', { x, y, width, height, fileId: imageInfo.fileId });
-              }
-
-              // Crear grupo para el ícono (debe estar dentro del SVG)
-              const svgNS = 'http://www.w3.org/2000/svg';
-              const iconGroup = document.createElementNS(svgNS, 'g');
-              iconGroup.setAttribute('class', 'excal-image-expand-icon');
-              iconGroup.setAttribute('data-file-id', imageInfo.fileId);
-              iconGroup.style.cursor = 'pointer';
-              iconGroup.style.pointerEvents = 'all';
-              iconGroup.style.opacity = '1';
-              iconGroup.style.visibility = 'visible';
-              // Asegurar que esté encima de otros elementos
-              iconGroup.setAttribute('data-z-index', '9999');
-              
-              // Calcular posición del ícono (esquina superior izquierda - muy cerca del borde)
-              const iconX = x + 0;
-              const iconY = y + 5;
-              
-              // Fondo circular semi-transparente - hacer más visible
-              const circle = document.createElementNS(svgNS, 'circle');
-              circle.setAttribute('cx', String(iconX));
-              circle.setAttribute('cy', String(iconY));
-              circle.setAttribute('r', '16'); // Más grande
-              circle.setAttribute('fill', '#000000'); // Negro sólido para mejor visibilidad
-              circle.setAttribute('fill-opacity', '0.8');
-              circle.setAttribute('stroke', '#ffffff');
-              circle.setAttribute('stroke-width', '2.5');
-              circle.style.cursor = 'pointer';
-              circle.style.pointerEvents = 'all';
-              circle.style.opacity = '1';
-              
-              // Ícono de expandir (cuatro cuadrados en esquina)
-              const iconPath = document.createElementNS(svgNS, 'path');
-              // Path para ícono de expandir (4 cuadrados pequeños)
-              const pathData = `M ${iconX - 6} ${iconY - 6} L ${iconX - 2} ${iconY - 6} L ${iconX - 2} ${iconY - 2} L ${iconX - 6} ${iconY - 2} Z ` +
-                             `M ${iconX + 2} ${iconY - 6} L ${iconX + 6} ${iconY - 6} L ${iconX + 6} ${iconY - 2} L ${iconX + 2} ${iconY - 2} Z ` +
-                             `M ${iconX - 6} ${iconY + 2} L ${iconX - 2} ${iconY + 2} L ${iconX - 2} ${iconY + 6} L ${iconX - 6} ${iconY + 6} Z ` +
-                             `M ${iconX + 2} ${iconY + 2} L ${iconX + 6} ${iconY + 2} L ${iconX + 6} ${iconY + 6} L ${iconX + 2} ${iconY + 6} Z`;
-              iconPath.setAttribute('d', pathData);
-              iconPath.setAttribute('fill', 'white');
-              iconPath.setAttribute('stroke', 'white');
-              iconPath.setAttribute('stroke-width', '0.5');
-              iconPath.style.cursor = 'pointer';
-              iconPath.style.pointerEvents = 'all';
-              
-              iconGroup.appendChild(circle);
-              iconGroup.appendChild(iconPath);
-              
-              // Agregar listener de click al ícono
-              const iconClickHandler = (e: Event) => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (process.env.NODE_ENV === 'development') {
-                  console.log('[ExcalidrawArticle] Click en ícono de expandir:', imageInfo);
-                }
-                selectedImageRef.current = imageInfo;
-                isModalOpenRef.current = true;
-                setSelectedImage(imageInfo);
-                setIsModalOpen(true);
-              };
-              
-              iconGroup.addEventListener('click', iconClickHandler, { capture: true });
-              circle.addEventListener('click', iconClickHandler, { capture: true });
-              iconPath.addEventListener('click', iconClickHandler, { capture: true });
-              
-              // Efecto hover en el ícono
-              const hoverEnter = () => {
-                circle.setAttribute('fill', 'rgba(59, 130, 246, 0.9)'); // azul
-              };
-              const hoverLeave = () => {
-                circle.setAttribute('fill', 'rgba(0, 0, 0, 0.7)');
-              };
-              
-              iconGroup.addEventListener('mouseenter', hoverEnter);
-              iconGroup.addEventListener('mouseleave', hoverLeave);
-              circle.addEventListener('mouseenter', hoverEnter);
-              circle.addEventListener('mouseleave', hoverLeave);
-              
-              // Insertar el ícono directamente en el SVG (al final para que esté encima)
-              svgEl.appendChild(iconGroup);
-              
-              // Verificar que se insertó correctamente
-              const insertedIcon = svgEl.querySelector(`.excal-image-expand-icon[data-file-id="${imageInfo.fileId}"]`);
-              if (process.env.NODE_ENV === 'development') {
-                console.log('[ExcalidrawArticle] Ícono agregado exitosamente', {
-                  inserted: !!insertedIcon,
-                  position: { iconX, iconY },
-                  imagePosition: { x, y, width, height },
-                  svgViewBox: svgEl.getAttribute('viewBox'),
-                  svgWidth: svgEl.getAttribute('width'),
-                  svgHeight: svgEl.getAttribute('height')
-                });
-              }
-            } catch (error) {
-              if (process.env.NODE_ENV === 'development') {
-                console.error('[ExcalidrawArticle] Error al agregar ícono:', error);
-              }
-            }
-          };
+          // Función para agregar ícono de expandir a una imagen - ELIMINADA
+          // Ya no se usa porque al hacer clic directamente en la imagen se expande
 
           // Función para hacer un elemento clicable
           const makeClickable = (element: Element, imageInfo: ImageInfo) => {
@@ -527,12 +351,6 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
             element.setAttribute('data-image-clickable', 'true');
             element.setAttribute('data-file-id', imageInfo.fileId);
             
-            // Agregar ícono de expandir
-            if (process.env.NODE_ENV === 'development') {
-              console.log('[ExcalidrawArticle] Llamando addExpandIcon para:', imageInfo.fileId);
-            }
-            addExpandIcon(element, imageInfo, undefined);
-            
             // Agregar listener de click usando React state setter
             const clickHandler = (e: Event) => {
               e.stopPropagation();
@@ -540,10 +358,14 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
               if (process.env.NODE_ENV === 'development') {
                 console.log('[ExcalidrawArticle] Click en imagen:', imageInfo);
               }
+              // Encontrar el índice de esta imagen en el array de imágenes
+              const imageIndex = identifiedImages.findIndex(img => img.fileId === imageInfo.fileId);
+              
               // Actualizar refs y estado
               selectedImageRef.current = imageInfo;
               isModalOpenRef.current = true;
               setSelectedImage(imageInfo);
+              setCurrentImageIndex(imageIndex >= 0 ? imageIndex : 0);
               setIsModalOpen(true);
             };
             
@@ -599,33 +421,48 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
             
             // Buscar el symbol referenciado
             const symbolId = useHref.replace('#', '');
-            const symbol = svgEl.querySelector(`symbol#${symbolId}`);
-            if (symbol) {
-              const symbolImage = symbol.querySelector('image');
-              if (symbolImage) {
-                const imageHref = symbolImage.getAttribute('href') || symbolImage.getAttribute('xlink:href') || '';
-                
-                // Buscar la imagen correspondiente
-                let matched = false;
-                for (const [shortDataUrl, imageInfo] of dataUrlMap.entries()) {
-                  if (imageHref.includes(shortDataUrl.substring(0, 30))) {
-                    // Usar el elemento <use> para obtener coordenadas reales
-                    makeClickable(useEl, imageInfo);
-                    addExpandIcon(symbolImage, imageInfo, useEl);
-                    clickableCount++;
-                    matched = true;
-                    if (process.env.NODE_ENV === 'development') {
-                      console.log('[ExcalidrawArticle] Imagen mapeada desde <use> y <symbol>:', imageInfo.fileId);
-                    }
-                    break;
-                  }
+            
+            // El symbolId suele ser "image-{fileId}", extraer el fileId
+            const fileIdMatch = symbolId.match(/image-(.+)/);
+            const symbolFileId = fileIdMatch ? fileIdMatch[1] : null;
+            
+            if (process.env.NODE_ENV === 'development') {
+              console.log('[ExcalidrawArticle] Procesando <use>:', { symbolId, symbolFileId });
+            }
+            
+            // Buscar la imagen por fileId primero (más confiable)
+            let matched = false;
+            if (symbolFileId) {
+              const matchingImage = identifiedImages.find(img => img.fileId === symbolFileId);
+              if (matchingImage) {
+                makeClickable(useEl, matchingImage);
+                clickableCount++;
+                matched = true;
+                if (process.env.NODE_ENV === 'development') {
+                  console.log('[ExcalidrawArticle] Imagen mapeada desde <use> por fileId:', matchingImage.fileId);
                 }
-                
-                if (!matched && identifiedImages.length > 0) {
-                  const imageToUse = identifiedImages[0];
-                  makeClickable(useEl, imageToUse);
-                  addExpandIcon(symbolImage, imageToUse, useEl);
-                  clickableCount++;
+              }
+            }
+            
+            // Fallback: buscar por data URL si no se encontró por fileId
+            if (!matched) {
+              const symbol = svgEl.querySelector(`symbol#${symbolId}`);
+              if (symbol) {
+                const symbolImage = symbol.querySelector('image');
+                if (symbolImage) {
+                  const imageHref = symbolImage.getAttribute('href') || symbolImage.getAttribute('xlink:href') || '';
+                  
+                  for (const [shortDataUrl, imageInfo] of dataUrlMap.entries()) {
+                    if (imageHref.includes(shortDataUrl.substring(0, 30))) {
+                      makeClickable(useEl, imageInfo);
+                      clickableCount++;
+                      matched = true;
+                      if (process.env.NODE_ENV === 'development') {
+                        console.log('[ExcalidrawArticle] Imagen mapeada desde <use> por dataUrl:', imageInfo.fileId);
+                      }
+                      break;
+                    }
+                  }
                 }
               }
             }
@@ -918,22 +755,47 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
     isModalOpenRef.current = isModalOpen;
   }, [selectedImage, isModalOpen]);
 
-  // Cerrar modal con ESC
+  // Funciones de navegación entre imágenes
+  const navigateToNextImage = () => {
+    if (identifiedImages.length === 0) return;
+    const nextIndex = (currentImageIndex + 1) % identifiedImages.length;
+    const nextImage = identifiedImages[nextIndex];
+    setCurrentImageIndex(nextIndex);
+    setSelectedImage(nextImage);
+    selectedImageRef.current = nextImage;
+  };
+
+  const navigateToPrevImage = () => {
+    if (identifiedImages.length === 0) return;
+    const prevIndex = (currentImageIndex - 1 + identifiedImages.length) % identifiedImages.length;
+    const prevImage = identifiedImages[prevIndex];
+    setCurrentImageIndex(prevIndex);
+    setSelectedImage(prevImage);
+    selectedImageRef.current = prevImage;
+  };
+
+  // Cerrar modal con ESC y navegar con flechas
   useEffect(() => {
     if (!isModalOpen) return;
 
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleKeyboard = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         selectedImageRef.current = null;
         isModalOpenRef.current = false;
         setIsModalOpen(false);
         setSelectedImage(null);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        navigateToNextImage();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        navigateToPrevImage();
       }
     };
 
-    window.addEventListener('keydown', handleEscape);
-    return () => window.removeEventListener('keydown', handleEscape);
-  }, [isModalOpen]);
+    window.addEventListener('keydown', handleKeyboard);
+    return () => window.removeEventListener('keydown', handleKeyboard);
+  }, [isModalOpen, currentImageIndex, identifiedImages]);
 
   return (
     <>
@@ -959,16 +821,16 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
           }}
         >
           <div
-            className="relative max-w-[90vw] max-h-[90vh] flex flex-col items-center"
+            className="relative w-full max-w-5xl flex flex-col items-center"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Botón cerrar */}
+            {/* Botón cerrar - ahora encima de la imagen */}
             <button
               onClick={() => {
                 setIsModalOpen(false);
                 setSelectedImage(null);
               }}
-              className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors p-2 rounded-full hover:bg-white/10"
+              className="absolute top-4 right-4 z-10 text-white hover:text-gray-300 transition-colors p-2 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm"
               aria-label="Cerrar"
             >
               <svg
@@ -987,12 +849,75 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
               </svg>
             </button>
 
+            {/* Contador de imágenes - ahora encima de la imagen */}
+            {identifiedImages.length > 1 && (
+              <div className="absolute top-4 left-4 z-10 text-white text-sm">
+                <span className="bg-black/50 backdrop-blur-sm px-3 py-1.5 rounded-full">
+                  {currentImageIndex + 1} / {identifiedImages.length}
+                </span>
+              </div>
+            )}
+
+            {/* Botón anterior */}
+            {identifiedImages.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateToPrevImage();
+                }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-3 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm"
+                aria-label="Imagen anterior"
+              >
+                <svg
+                  className="w-8 h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+              </button>
+            )}
+
+            {/* Botón siguiente */}
+            {identifiedImages.length > 1 && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigateToNextImage();
+                }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white hover:text-gray-300 transition-colors p-3 rounded-full bg-black/50 hover:bg-black/70 backdrop-blur-sm"
+                aria-label="Imagen siguiente"
+              >
+                <svg
+                  className="w-8 h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            )}
+
             {/* Imagen */}
             {selectedImage.dataUrl ? (
               <img
                 src={selectedImage.dataUrl}
                 alt={selectedImage.fileName || 'Imagen de Excalidraw'}
-                className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
+                className="w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
                 style={{ imageRendering: 'auto' }}
               />
             ) : (
@@ -1015,7 +940,10 @@ const ExcalidrawArticle: React.FC<Props> = ({ articleData, onImagesIdentified })
 
             {/* Instrucciones */}
             <p className="text-gray-400 text-xs mt-4 text-center">
-              Presiona ESC o haz clic fuera para cerrar
+              {identifiedImages.length > 1 
+                ? 'Usa ← → para navegar • ESC o clic fuera para cerrar'
+                : 'Presiona ESC o haz clic fuera para cerrar'
+              }
             </p>
           </div>
         </div>
