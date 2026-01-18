@@ -1,0 +1,109 @@
+---
+title: "TypeScript no es un lenguaje de programación"
+description: "Spoiler: es JavaScript con un disfraz muy elaborado"
+pubDate: 2026-01-15
+---
+
+Sí, leíste bien. Y no, no me importa si esto arruina tu LinkedIn donde pusiste "TypeScript" como skill separado de JavaScript.
+
+Cada vez que alguien dice "estoy aprendiendo TypeScript como mi segundo lenguaje", un gatito muere en algún lugar del mundo.
+
+## La prueba
+
+Escribe esto:
+
+```typescript
+interface Usuario {
+  nombre: string;
+  edad: number;
+}
+
+function saludar(usuario: Usuario): string {
+  return `Hola ${usuario.nombre}, tienes ${usuario.edad} años`;
+}
+
+const yo: Usuario = { nombre: "Eliseo", edad: 25 };
+console.log(saludar(yo));
+```
+
+Ahora pregúntate: ¿qué parte de este código **realmente se ejecuta**?
+
+Respuesta: **nada de TypeScript**. Absolutamente nada.
+
+## Lo que realmente ejecutas
+
+Node.js ve esto:
+
+```javascript
+function saludar(usuario) {
+  return `Hola ${usuario.nombre}, tienes ${usuario.edad} años`;
+}
+
+const yo = { nombre: "Eliseo", edad: 25 };
+console.log(saludar(yo));
+```
+
+Todo lo que era TypeScript desapareció. Se evaporó. Poof. 
+
+Porque nunca existió en runtime. TypeScript es un fantasma que solo vive en tu editor.
+
+## Qué hace un lenguaje real
+
+Un lenguaje de programación **real** tiene:
+- Un runtime (Python tiene CPython, Java tiene la JVM)
+- Características que afectan la ejecución
+- Comportamientos únicos cuando el código corre
+
+TypeScript tiene... un compilador que borra cosas. Eso es todo. Es un borrador glorificado.
+
+## "Pero tiene enums, decoradores, namespaces..."
+
+Sí, y todos se compilan a JavaScript. Son azúcar sintáctica.
+
+```typescript
+enum Color {
+  Rojo,
+  Verde,
+  Azul
+}
+```
+
+Se convierte en:
+
+```javascript
+var Color;
+(function (Color) {
+    Color[Color["Rojo"] = 0] = "Rojo";
+    Color[Color["Verde"] = 1] = "Verde";
+    Color[Color["Azul"] = 2] = "Azul";
+})(Color || (Color = {}));
+```
+
+JavaScript disfrazado. Siempre lo fue. Siempre lo será.
+
+## La analogía real
+
+TypeScript es ESLint con esteroides. Un linter que entiende tipos y te grita antes de que la cagues. Eso es literalmente todo.
+
+## Por qué importa
+
+Cuando entiendes que TypeScript no es un lenguaje:
+
+1. **Dejas de buscar "la forma TypeScript" de hacer las cosas**. No existe. Es JavaScript con tipos.
+
+2. **Entiendes por qué algunos bugs pasan desapercibidos**. TypeScript solo existe en compilación. En runtime, estás solo con JavaScript.
+
+3. **Dejas de pelear con el compilador**. No estás aprendiendo un lenguaje nuevo. Estás aprendiendo a anotar JavaScript.
+
+## Entonces qué es
+
+Una **herramienta de desarrollo**. Buena, útil, necesaria incluso. Pero no un lenguaje.
+
+Es un sistema de tipos estático sobre un lenguaje dinámico. Es análisis estático que te salva de ti mismo. Es un compilador que básicamente hace `Ctrl+H` y borra tipos.
+
+Pero no es un lenguaje de programación.
+
+
+---
+
+¿Seguiré usando TypeScript? Obvio. JAJAJ solo quería fastidiar un poco.
