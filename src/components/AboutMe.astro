@@ -3,12 +3,10 @@
 const date = new Date();
 const age = date.getFullYear() - 2004;
 const experience = date.getFullYear() - 2022;
-
-import Model3D from "./Model3D.tsx";
 ---
-<section class="flex flex-col md:flex-row gap-8 justify-center items-center">
+<section class="flex flex-col gap-6 justify-center items-center max-w-2xl mx-auto">
   <div
-    class="[&>p]:mb-4 [&_*strong]:text-yellow-400 [&_*strong]:font-semibold text-pretty order-2 md:order-1"
+    class="[&>p]:mb-4 [&_*strong]:text-yellow-400 [&_*strong]:font-semibold text-pretty"
   >
     <p>
       Soy Eliseo Francisco Arévalo, desarrollador de software de <strong>{ age } años</strong> con
@@ -21,14 +19,5 @@ import Model3D from "./Model3D.tsx";
       <li><strong>Borra sin miedo el código inútil.</strong></li>
       <li><strong>Si necesita muchos comentarios, reházlo.</strong></li>
     </ul>
-  </div>
-  <div class="w-40 h-40 sm:w-52 sm:h-48 md:w-64 md:h-56 order-1 md:order-2">
-    <Model3D 
-      client:only="react"
-      modelPath="/reverse_flash.glb"
-      className="w-full h-full"
-      autoRotate={true}
-      autoRotateSpeed={0.8}
-    />
   </div>
 </section>

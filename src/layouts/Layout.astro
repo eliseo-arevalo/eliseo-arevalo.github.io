@@ -146,6 +146,26 @@ const { description, title } = Astro.props
           }
         });
       })();
+
+      // Manejo de scroll suave para enlaces internos con hash
+      document.addEventListener('click', (e) => {
+        const target = e.target as Element;
+        const link = target.closest('a');
+        if (!link) return;
+        
+        const href = link.getAttribute('href');
+        if (!href || !href.startsWith('/#')) return;
+        
+        e.preventDefault();
+        const id = href.substring(2); // Remover "/#"
+        const element = document.getElementById(id);
+        
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+          // Actualizar URL sin recargar
+          history.pushState(null, '', href);
+        }
+      });
     </script>
   </body>
 </html>
