@@ -11,35 +11,68 @@
   <nav
     class={`
       rounded-full
-      px-3 py-1
+      px-2 py-1 sm:px-3
       flex flex-row items-center
       backdrop-blur-2xl
-      gap-x-10 opacity-80
+      gap-x-4 sm:gap-x-6 lg:gap-x-10 opacity-80
+      text-sm sm:text-base
       `}
   >
-    <a
-      class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
-      href="/"
-      >Inicio
-    </a>
-    <a
-      class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
-      href="/#experiencia"
-      >Experiencia
-    </a>
-    <a
-      class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
-      href="/#proyectos"
-      >Proyectos
-    </a>
-    <a
-      class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
-      href="/notas"
-      >Notas
-    </a>
+    <!-- Desktop Navigation -->
+    <div class="hidden sm:flex items-center gap-x-6 lg:gap-x-10">
+      <a
+        class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
+        href="/"
+        >Inicio
+      </a>
+      <a
+        class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
+        href="/#experiencia"
+        >Experiencia
+      </a>
+      <a
+        class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
+        href="/#proyectos"
+        >Proyectos
+      </a>
+      <a
+        class="hover:scale-110 hover:bg-white/20 rounded-full transition px-2"
+        href="/notas"
+        >Notas
+      </a>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="sm:hidden flex items-center gap-x-4">
+      <div class="relative">
+        <button
+          id="mobile-menu-toggle"
+          class="flex items-center gap-1 hover:bg-white/20 rounded-full transition px-2 py-1"
+        >
+          Inicio
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div
+          id="mobile-dropdown"
+          class="absolute top-full left-0 mt-2 bg-white/90 dark:bg-black/80 backdrop-blur-2xl rounded-lg py-2 min-w-32 hidden border border-gray-200 dark:border-gray-700"
+        >
+          <a href="/" class="block px-3 py-2 hover:bg-white/20 transition" onclick="document.getElementById('mobile-dropdown').classList.add('hidden')">Inicio</a>
+          <a href="/#experiencia" class="block px-3 py-2 hover:bg-white/20 transition" onclick="document.getElementById('mobile-dropdown').classList.add('hidden')">Experiencia</a>
+          <a href="/#proyectos" class="block px-3 py-2 hover:bg-white/20 transition" onclick="document.getElementById('mobile-dropdown').classList.add('hidden')">Proyectos</a>
+        </div>
+      </div>
+      <a
+        class="hover:bg-white/20 rounded-full transition px-2 py-1"
+        href="/notas"
+        >Notas
+      </a>
+    </div>
+
     <button
       id="theme-toggle"
-      class="ml-4 p-2 rounded-full hover:bg-white/20 transition"
+      class="ml-2 sm:ml-4 p-1 sm:p-2 rounded-full hover:bg-white/20 transition"
       title="Cambiar tema"
       type="button"
     >
@@ -71,6 +104,23 @@
 </header>
 
 <script>
+  // Mobile menu toggle
+  const mobileMenuToggle = document.getElementById('mobile-menu-toggle');
+  const mobileDropdown = document.getElementById('mobile-dropdown');
+
+  if (mobileMenuToggle && mobileDropdown) {
+    mobileMenuToggle.addEventListener('click', function() {
+      mobileDropdown.classList.toggle('hidden');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!mobileMenuToggle.contains(event.target) && !mobileDropdown.contains(event.target)) {
+        mobileDropdown.classList.add('hidden');
+      }
+    });
+  }
+
   // Theme toggle logic
   const themeToggleBtn = document.getElementById('theme-toggle');
   const lightIcon = document.getElementById('theme-toggle-light-icon');

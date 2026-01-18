@@ -167,64 +167,64 @@ const allGroupNames = groups.map(([key, { display }]) => display);
 ---
 
 <Layout title="Notas | Eliseo Arévalo" description="MDX y Excalidraw bajo una sola ruta.">
-    <SectionContainer class="mt-16" data-notes-root>
-		<h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100">Notas</h1>
-		<p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
-			Explora un poco mis notas e ideas 
-		</p>
+    <main class="px-4">
+        <SectionContainer class="mt-16" data-notes-root>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100">Notas</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                Explora un poco mis notas e ideas 
+            </p>
 
-			
-
-		<div class="mt-8 space-y-10" data-groups>
-			{groups.map(([groupKey, entry]) => (
-				<section data-group-section data-group={groupKey}>
-					<div class="flex items-end gap-3">
-						<h2 class="text-2xl font-semibold capitalize text-gray-900 dark:text-gray-100">{String(entry.display).replace(/-/g,' ')}</h2>
-						<span class="text-xs text-gray-600 dark:text-gray-400">{entry.items.length} notas</span>
-                        {entry.items.length > 3 && (
-                            <a href={`/notas/grupo/${encodeURIComponent(String(groupKey))}`} class="ml-auto text-xs px-2 py-0.5 rounded-full border border-gray-300 dark:border-gray-700 hover:bg-black/5 dark:hover:bg-white/10">
-                                Ver todas
-                            </a>
-                        )}
-					</div>
-					<ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						{entry.items.map(({ slug, title, url, type, description, preview, date }, idx) => (
-						<li data-type={type} data-idx={idx} class={`${idx>=3?'hidden':''}`}>
-                                <a href={url} class="group block rounded-xl overflow-hidden hover:bg-black/5 dark:hover:bg-white/5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60">
-                                    {/* Media superior (altura pequeña) */}
-                    {type === 'excalidraw' && preview ? (
-                        <div class="w-full overflow-hidden bg-gray-50 dark:bg-white/5" style={`view-transition-name: note-${String(slug).toLowerCase().replace(/[^a-z0-9_-]/g,'-')}`}>
-                          <ExcalPreview client:only="react" data={preview} height={96} />
-                        </div>
-                    ) : (
-                        <div class="w-full h-[96px] flex items-center justify-center bg-gray-100 dark:bg-white/5">
-                          <span class="text-[10px] uppercase tracking-wide text-gray-600 dark:text-gray-300">MDX</span>
-                        </div>
-                    )}
-
-                                    {/* Contenido vertical */}
-                                    <div class="p-3 sm:p-4">
-                                        <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 group-hover:text-sky-400 transition line-clamp-1">
-                                            {title}
-                                        </h3>
-                                        {description && (
-                                            <p class="mt-1 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">{description}</p>
-                                        )}
-                                        <div class="mt-2 flex items-center gap-2 text-[10px] text-gray-600 dark:text-gray-400">
-                                            {formatDate(date) && (
-                                                <time datetime={new Date(date).toISOString()}>{formatDate(date)}</time>
-                                            )}
-                                            <span class="rounded-full px-2 py-0.5 border border-gray-300 dark:border-gray-700 opacity-80">{type}</span>
-                                        </div>
-                                    </div>
+            <div class="mt-8 space-y-10" data-groups>
+                {groups.map(([groupKey, entry]) => (
+                    <section data-group-section data-group={groupKey}>
+                        <div class="flex items-end gap-3">
+                            <h2 class="text-2xl font-semibold capitalize text-gray-900 dark:text-gray-100">{String(entry.display).replace(/-/g,' ')}</h2>
+                            <span class="text-xs text-gray-600 dark:text-gray-400">{entry.items.length} notas</span>
+                            {entry.items.length > 3 && (
+                                <a href={`/notas/grupo/${encodeURIComponent(String(groupKey))}`} class="ml-auto text-xs px-2 py-0.5 rounded-full border border-gray-300 dark:border-gray-700 hover:bg-black/5 dark:hover:bg-white/10">
+                                    Ver todas
                                 </a>
-							</li>
-						))}
-					</ul>
-				</section>
-			))}
-		</div>
-    </SectionContainer>
+                            )}
+                        </div>
+                        <ul class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                            {entry.items.map(({ slug, title, url, type, description, preview, date }, idx) => (
+                            <li data-type={type} data-idx={idx} class={`${idx>=3?'hidden':''}`}>
+                                    <a href={url} class="group block rounded-xl overflow-hidden hover:bg-black/5 dark:hover:bg-white/5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-sky-400/60">
+                                        {/* Media superior (altura pequeña) */}
+                        {type === 'excalidraw' && preview ? (
+                            <div class="w-full overflow-hidden bg-gray-50 dark:bg-white/5" style={`view-transition-name: note-${String(slug).toLowerCase().replace(/[^a-z0-9_-]/g,'-')}`}>
+                              <ExcalPreview client:only="react" data={preview} height={96} />
+                            </div>
+                        ) : (
+                            <div class="w-full h-[96px] flex items-center justify-center bg-gray-100 dark:bg-white/5">
+                              <span class="text-[10px] uppercase tracking-wide text-gray-600 dark:text-gray-300">MDX</span>
+                            </div>
+                        )}
+
+                                        {/* Contenido vertical */}
+                                        <div class="p-3 sm:p-4">
+                                            <h3 class="text-base font-semibold text-gray-900 dark:text-gray-100 group-hover:text-sky-400 transition line-clamp-1">
+                                                {title}
+                                            </h3>
+                                            {description && (
+                                                <p class="mt-1 text-sm text-gray-700 dark:text-gray-300 line-clamp-2">{description}</p>
+                                            )}
+                                            <div class="mt-2 flex items-center gap-2 text-[10px] text-gray-600 dark:text-gray-400">
+                                                {formatDate(date) && (
+                                                    <time datetime={new Date(date).toISOString()}>{formatDate(date)}</time>
+                                                )}
+                                                <span class="rounded-full px-2 py-0.5 border border-gray-300 dark:border-gray-700 opacity-80">{type}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                ))}
+            </div>
+        </SectionContainer>
+    </main>
 
 		<script>
 			// Toggle "Ver todas" por grupo
