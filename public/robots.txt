@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://eliseo-arevalo.github.io/sitemap-index.xml

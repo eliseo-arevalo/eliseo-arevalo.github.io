@@ -7,9 +7,12 @@ import Footer from "../components/Footer.astro"
 interface Props {
   title: string
   description: string
+  image?: string
+  keywords?: string
 }
 
-const { description, title } = Astro.props
+const { description, title, image = '/eliseo.png', keywords = 'desarrollador fullstack, .net, javascript, react, astro, El Salvador' } = Astro.props
+const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
 <!doctype html>
@@ -17,10 +20,50 @@ const { description, title } = Astro.props
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywords} />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
     <meta name="generator" content={Astro.generator} />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={new URL(image, Astro.site)} />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={new URL(image, Astro.site)} />
+    
+    <!-- Author & Professional Info -->
+    <meta name="author" content="Eliseo Arévalo" />
+    <meta name="robots" content="index, follow" />
+    
     <title>{title}</title>
+    <script defer src="https://unami-oclazi.vercel.app/script.js" data-website-id="4a640990-da64-4b4b-9cb2-0753511116f9"></script>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Eliseo Arévalo",
+        "jobTitle": "Desarrollador Fullstack",
+        "url": "https://eliseo-arevalo.github.io",
+        "sameAs": [
+          "https://github.com/eliseo-arevalo",
+          "https://linkedin.com/in/eliseo-arevalo"
+        ],
+        "knowsAbout": ["ASP.NET Core", "JavaScript", "React", "Next.js", "Tailwind CSS", "SQL Server"],
+        "alumniOf": "ESFE/AGAPE",
+        "workLocation": "El Salvador"
+      }
+    </script>
     <script>
       // Anti-flash de tema: forzar modo oscuro por defecto
       (function(){
