@@ -54,22 +54,14 @@ import GradualBlur from "@/components/GradualBlur.tsx"
 				</span>
 				<span> ¿por qué conformarte con menos? Es simple: da siempre el máximo; es todo o nada.</span>
 			</h2>
-			<nav class="flex gap-3 mt-6 flex-wrap justify-center">
-				<SocialPill href="mailto:eliseo.arevalo@outlook.com">
+			<nav class="flex gap-3 mt-6 flex-wrap justify-start">
+				<SocialPill href="mailto:eliseo.arev@gmail.com">
 					<MailIcon class="size-4" />
 					Contacto
-				</SocialPill>
-				<SocialPill href="/EliseoArevaloCV.pdf" download>
-					<CVIcon class="size-4" />
-					Descargar CV
 				</SocialPill>
 				<SocialPill href="http://linkedin.com/in/eliseo-arevalo">
 					<LinkedInIcon class="size-4" />
 					LinkedIn
-				</SocialPill>
-				<SocialPill href="https://github.com/eliseo-arevalo">
-					<GitHubIcon class="size-4" />
-					GitHub
 				</SocialPill>
 			</nav>
 				</div>
@@ -119,11 +111,10 @@ import GradualBlur from "@/components/GradualBlur.tsx"
 				Sobre mí
 			</h2>
 			<AboutMe />
-		</SectionContainer>
-
-		<!-- Spotify Widget -->
-		<div class="w-full px-4 mt-6">
-			<div class="w-full mx-auto max-w-md">
+			
+			<!-- Spotify Widget -->
+			<div class="mt-8 pt-8 border-t border-gray-200 dark:border-white/10">
+				<p class="text-sm text-gray-600 dark:text-gray-400 mb-3">Actualmente escuchando:</p>
 				<iframe 
 					src="https://open.spotify.com/embed/track/0pxPNTroZcxXA0w6IDgMQJ?utm_source=generator&theme=0" 
 					width="100%" 
@@ -134,7 +125,7 @@ import GradualBlur from "@/components/GradualBlur.tsx"
 					style="border-radius: 12px;"
 				></iframe>
 			</div>
-		</div>
+		</SectionContainer>
 	</main>
 
 	<script>
