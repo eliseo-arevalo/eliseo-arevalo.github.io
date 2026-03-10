@@ -1,0 +1,185 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import { Icon } from 'astro-icon/components'
+import GitHub from "@/components/icons/GitHub.astro"
+---
+
+<Layout
+	title="ChivoMap - Mapa Interactivo de El Salvador | Eliseo Arévalo"
+	description="Aplicación de geolocalización para El Salvador con rutas de buses y puntos de interés. Desarrollada con React y Go."
+	image="/projects/chivomap-2.png"
+>
+	<main class="px-4">
+		<!-- Hero -->
+		<SectionContainer class="py-12">
+			<a href="/#proyectos" class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+				</svg>
+				Volver a proyectos
+			</a>
+
+			<div class="mb-8">
+				<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+					ChivoMap
+				</h1>
+				
+				<div class="flex flex-wrap gap-2 mb-4">
+					<span class="inline-flex items-center gap-1.5 rounded-md text-xs font-medium bg-[#149eca] text-white py-1.5 px-2.5 shadow-sm">
+						<Icon name="simple-icons:react" class="size-3.5" />
+						React
+					</span>
+					<span class="inline-flex items-center gap-1.5 rounded-md text-xs font-medium bg-[#00add8] text-white py-1.5 px-2.5 shadow-sm">
+						<Icon name="simple-icons:go" class="size-3.5" />
+						Go
+					</span>
+				</div>
+				
+				<p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
+					El mapa de El Salvador | Rutas de buses y más
+				</p>
+
+				<div class="flex gap-4">
+					<a
+						href="https://github.com/chivomap/chivomap/"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+					>
+						<GitHub class="size-5" />
+						Ver código
+					</a>
+					<a
+						href="https://chivomap.com"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white font-medium hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-colors"
+					>
+						<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+						</svg>
+						Ver sitio
+					</a>
+				</div>
+			</div>
+
+			<div class="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-lg">
+				<img
+					src="/projects/chivomap-2.png"
+					alt="ChivoMap - Captura de pantalla"
+					class="w-full"
+				/>
+			</div>
+		</SectionContainer>
+
+		<!-- Problema -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				El Problema
+			</h2>
+			<div class="prose dark:prose-invert max-w-none">
+				<p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+					En El Salvador, la información sobre rutas de transporte público y la nueva distribución geopolítica del país no estaba centralizada ni era fácilmente accesible. Los usuarios necesitaban una herramienta moderna y visual para navegar por el territorio salvadoreño y planificar sus rutas.
+				</p>
+			</div>
+		</SectionContainer>
+
+		<!-- Solución -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				La Solución
+			</h2>
+			<div class="prose dark:prose-invert max-w-none">
+				<p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+					ChivoMap es una aplicación web de geolocalización que combina mapas interactivos con información de transporte público. La arquitectura utiliza:
+				</p>
+				<ul class="text-gray-600 dark:text-gray-400 space-y-2">
+					<li><strong>Frontend en React</strong> - Interfaz dinámica y responsive con Leaflet para renderizado de mapas</li>
+					<li><strong>Backend en Go</strong> - API REST de alto rendimiento para servir datos geográficos</li>
+					<li><strong>Node.js</strong> - Procesamiento de datos y servicios auxiliares</li>
+					<li><strong>Leaflet</strong> - Biblioteca de mapas interactivos open source</li>
+				</ul>
+			</div>
+		</SectionContainer>
+
+		<!-- Desafíos -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				Desafíos Técnicos
+			</h2>
+			<div class="space-y-6">
+				<div class="border-l-4 border-yellow-500 pl-4">
+					<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+						Rendimiento con grandes volúmenes de datos
+					</h3>
+					<p class="text-gray-600 dark:text-gray-400">
+						Optimización de la carga y renderizado de múltiples capas de mapas con miles de puntos de interés y rutas de buses sin afectar la experiencia del usuario.
+					</p>
+				</div>
+				
+				<div class="border-l-4 border-yellow-500 pl-4">
+					<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+						Integración de datos geográficos
+					</h3>
+					<p class="text-gray-600 dark:text-gray-400">
+						Procesamiento y normalización de datos de múltiples fuentes para crear una base de datos geográfica consistente y actualizada.
+					</p>
+				</div>
+			</div>
+		</SectionContainer>
+
+		<!-- Resultados -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				Impacto
+			</h2>
+			<div class="grid md:grid-cols-3 gap-6">
+				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
+					<div class="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
+						Open Source
+					</div>
+					<p class="text-gray-600 dark:text-gray-400">
+						Proyecto de código abierto disponible para la comunidad
+					</p>
+				</div>
+				
+				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
+					<div class="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
+						Escalable
+					</div>
+					<p class="text-gray-600 dark:text-gray-400">
+						Arquitectura preparada para crecer con nuevas funcionalidades
+					</p>
+				</div>
+				
+				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
+					<div class="text-3xl font-bold text-yellow-600 dark:text-yellow-400 mb-2">
+						Moderno
+					</div>
+					<p class="text-gray-600 dark:text-gray-400">
+						Stack tecnológico actual y mejores prácticas de desarrollo
+					</p>
+				</div>
+			</div>
+		</SectionContainer>
+
+		<!-- CTA -->
+		<SectionContainer>
+			<div class="bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 dark:from-yellow-500/20 dark:to-yellow-600/20 rounded-xl p-8 border border-yellow-500/20">
+				<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+					¿Interesado en colaborar?
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400 mb-6">
+					Si tienes un proyecto similar o quieres discutir sobre desarrollo web y arquitectura de software, contáctame.
+				</p>
+				<a
+					href="mailto:eliseo.arev@gmail.com"
+					class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+				>
+					Enviar mensaje
+				</a>
+			</div>
+		</SectionContainer>
+	</main>
+</Layout>

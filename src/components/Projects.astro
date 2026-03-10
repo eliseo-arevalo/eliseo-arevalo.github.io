@@ -1,8 +1,6 @@
 ---
 import GitHub from "./icons/GitHub.astro"
-import React from "./icons/React.astro"
-import Go from "./icons/Go.astro"
-import Excalidraw from "./icons/Excalidraw.astro"
+import { Icon } from 'astro-icon/components'
 import Tailwind from "./icons/Tailwind.astro"
 import LinkButton from "./LinkButton.astro"
 import CSharp from "./icons/CSharp.astro"
@@ -12,17 +10,17 @@ const TAGS = {
   REACT: {
     name: "React",
     class: "bg-[#149eca] text-white",
-    icon: React,
+    icon: "simple-icons:react",
   },
   GO: {
     name: "Go",
     class: "bg-[#00add8] text-white",
-    icon: Go,
+    icon: "simple-icons:go",
   },
   EXCALIDRAW: {
     name: "Excalidraw",
     class: "bg-[#6965db] text-white",
-    icon: Excalidraw,
+    icon: "simple-icons:excalidraw",
   },
   TAILWIND: {
     name: "Tailwind CSS",
@@ -67,73 +65,77 @@ const PROJECTS = [
   {
     PROJECTS.map(({ image, title, description, tags, link, github }) => (
       <article class="group relative overflow-hidden rounded-xl border border-gray-200 dark:border-white/10 bg-white/50 dark:bg-white/5 backdrop-blur-sm hover:border-gray-300 dark:hover:border-white/20 transition-all duration-300 hover:shadow-lg flex flex-col h-full">
-        {/* Imagen superior */}
-        <div class="relative overflow-hidden bg-gray-100 dark:bg-gray-900">
-          <img
-            loading="lazy"
-            class="w-full aspect-video object-cover object-top transition-transform duration-500 group-hover:scale-105"
-            src={image}
-            alt={`Captura de pantalla del proyecto ${title}`}
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-        </div>
-
-        {/* Contenido */}
-        <div class="p-6 flex flex-col flex-grow">
-          <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
-            {title}
-          </h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed">
-            {description}
-          </p>
-
-          {/* Tags */}
-          <div class="flex flex-wrap gap-2 mb-5">
-            {tags.map((tag) => (
-              <span
-                class={`inline-flex items-center gap-1.5 rounded-md text-xs font-medium ${tag.class} py-1.5 px-2.5 shadow-sm`}
-              >
-                <tag.icon class="size-3.5" />
-                {tag.name}
-              </span>
-            ))}
+        <a href={`/proyectos/${title.toLowerCase().replace(' ', '-')}`} class="flex flex-col flex-grow">
+          {/* Imagen superior */}
+          <div class="relative overflow-hidden bg-gray-100 dark:bg-gray-900">
+            <img
+              loading="lazy"
+              class="w-full aspect-video object-cover object-top transition-transform duration-500 group-hover:scale-105"
+              src={image}
+              alt={`Captura de pantalla del proyecto ${title}`}
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
 
-          {/* Botones - Siempre al fondo */}
-          <div class="flex gap-3 pt-4 border-t border-gray-200 dark:border-white/10 mt-auto">
-            {github && (
-              <a
-                href={github}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
-              >
-                <GitHub class="size-4" />
-                <span>Código</span>
-              </a>
-            )}
+          {/* Contenido */}
+          <div class="p-6 flex flex-col flex-grow">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-gray-100 mb-2 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+              {title}
+            </h3>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mb-4 leading-relaxed flex-grow">
+              {description}
+            </p>
+
+            {/* Tags */}
+            <div class="flex flex-wrap gap-2">
+              {tags.map((tag) => (
+                <span
+                  class={`inline-flex items-center gap-1.5 rounded-md text-xs font-medium ${tag.class} py-1.5 px-2.5 shadow-sm`}
+                >
+                  <Icon name={tag.icon} class="size-3.5" />
+                  {tag.name}
+                </span>
+              ))}
+            </div>
+          </div>
+        </a>
+
+        {/* Botones - Siempre al fondo */}
+        <div class="flex gap-3 px-6 pb-6 pt-4 border-t border-gray-200 dark:border-white/10 mt-auto">
+          {github && (
             <a
-              href={link}
+              href={github}
               target="_blank"
               rel="noopener noreferrer"
-              class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors"
+              class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors z-10"
+              onclick="event.stopPropagation()"
             >
-              <svg
-                class="size-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                />
-              </svg>
-              <span>Ver sitio</span>
+              <GitHub class="size-4" />
+              <span>Código</span>
             </a>
-          </div>
+          )}
+          <a
+            href={link}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-colors z-10"
+            onclick="event.stopPropagation()"
+          >
+            <svg
+              class="size-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              />
+            </svg>
+            <span>Ver sitio</span>
+          </a>
         </div>
       </article>
     ))

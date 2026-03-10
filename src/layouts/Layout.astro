@@ -114,10 +114,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
           const a = target?.closest?.('a');
           if (!a) return false;
           const href = a.getAttribute('href') || '';
-          // No interceptar enlaces con hash (anclas), aunque usen "/#id"
-          if (href.includes('#') || a.hasAttribute('download')) return false;
+          // Permitir enlaces con hash para navegación interna
+          if (a.hasAttribute('download')) return false;
           const url = new URL((a as HTMLAnchorElement).href, location.href);
-          // Permitir interceptar navegación entre páginas internas (excepto anclas y externos)
+          // Permitir interceptar navegación entre páginas internas (incluyendo hashes)
           if (url.origin !== location.origin) return false;
           return true;
         }
@@ -135,10 +135,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
         }
 
         async function load(url: string){
-          // Resetear scroll inmediatamente antes de cargar el contenido
-          window.scrollTo({ top: 0, behavior: 'instant' });
+          const urlObj = new URL(url);
+          const hasHash = urlObj.hash;
           
-          const res = await fetch(url, { headers: { 'X-Requested-With': 'view-transition' } });
+          // Resetear scroll solo si no hay hash
+          if (!hasHash) {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }
+          
+          const res = await fetch(urlObj.pathname + urlObj.search, { headers: { 'X-Requested-With': 'view-transition' } });
           const html = await res.text();
           const doc = new DOMParser().parseFromString(html, 'text/html');
           const next = doc.querySelector(appSelector);
@@ -151,8 +156,18 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
           // Rehidratar islas de Astro tras el swap para que componentes client-only/visible se monten
           try { window.dispatchEvent(new Event('astro:page-load')); } catch {}
           
-          // Asegurar que el scroll esté en 0 después de cargar
-          window.scrollTo({ top: 0, behavior: 'instant' });
+          // Si hay hash, hacer scroll al elemento
+          if (hasHash) {
+            const id = hasHash.substring(1);
+            const element = document.getElementById(id);
+            if (element) {
+              setTimeout(() => {
+                element.scrollIntoView({ behavior: 'smooth' });
+              }, 100);
+            }
+          } else {
+            window.scrollTo({ top: 0, behavior: 'instant' });
+          }
         }
 
         addEventListener('click', (e: MouseEvent) => {
@@ -164,14 +179,10 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
           if (supportsVT){
             (document as any).startViewTransition(() => load(url.toString())).finished.then(() => {
               history.pushState(null, '', url.toString());
-              // El scroll ya se reseteó en load(), pero aseguramos aquí también
-              window.scrollTo({ top: 0, behavior: 'instant' });
             }).catch(() => location.href = url.toString());
           } else {
             load(url.toString()).then(() => {
               history.pushState(null, '', url.toString());
-              // El scroll ya se reseteó en load(), pero aseguramos aquí también
-              window.scrollTo({ top: 0, behavior: 'instant' });
             }).catch(() => location.href = url.toString());
           }
         });
@@ -179,28 +190,25 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
         addEventListener('popstate', () => {
           const url = location.href;
           if (supportsVT){
-            (document as any).startViewTransition(() => load(url)).finished.then(() => {
-              window.scrollTo({ top: 0, behavior: 'instant' });
-            });
+            (document as any).startViewTransition(() => load(url)).finished;
           } else {
-            load(url).then(() => {
-              window.scrollTo({ top: 0, behavior: 'instant' });
-            });
+            load(url);
           }
         });
       })();
 
-      // Manejo de scroll suave para enlaces internos con hash
+      // Manejo de scroll suave para enlaces internos con hash en la misma página
       document.addEventListener('click', (e) => {
         const target = e.target as Element;
         const link = target.closest('a');
         if (!link) return;
         
         const href = link.getAttribute('href');
-        if (!href || !href.startsWith('/#')) return;
+        // Solo manejar hashes en la misma página (que empiezan con #)
+        if (!href || !href.startsWith('#')) return;
         
         e.preventDefault();
-        const id = href.substring(2); // Remover "/#"
+        const id = href.substring(1); // Remover "#"
         const element = document.getElementById(id);
         
         if (element) {

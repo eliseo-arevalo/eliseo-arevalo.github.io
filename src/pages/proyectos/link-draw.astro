@@ -1,0 +1,185 @@
+---
+import Layout from "@/layouts/Layout.astro"
+import SectionContainer from "@/components/SectionContainer.astro"
+import { Icon } from 'astro-icon/components'
+import GitHub from "@/components/icons/GitHub.astro"
+---
+
+<Layout
+	title="Link Draw - Herramienta de Dibujo Colaborativo | Eliseo Arévalo"
+	description="Herramientas de dibujo multi canvas enlazados para colaboración visual en tiempo real. Desarrollada con React y Excalidraw."
+	image="/projects/link-draw.png"
+>
+	<main class="px-4">
+		<!-- Hero -->
+		<SectionContainer class="py-12">
+			<a href="/#proyectos" class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+				</svg>
+				Volver a proyectos
+			</a>
+
+			<div class="mb-8">
+				<h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3">
+					Link Draw
+				</h1>
+				
+				<div class="flex flex-wrap gap-2 mb-4">
+					<span class="inline-flex items-center gap-1.5 rounded-md text-xs font-medium bg-[#149eca] text-white py-1.5 px-2.5 shadow-sm">
+						<Icon name="simple-icons:react" class="size-3.5" />
+						React
+					</span>
+					<span class="inline-flex items-center gap-1.5 rounded-md text-xs font-medium bg-[#6965db] text-white py-1.5 px-2.5 shadow-sm">
+						<Icon name="simple-icons:excalidraw" class="size-3.5" />
+						Excalidraw
+					</span>
+				</div>
+				
+				<p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
+					Herramientas de dibujo multi canvas enlazados
+				</p>
+
+				<div class="flex gap-4">
+					<a
+						href="https://github.com/eliseodesign/link-draw"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+					>
+						<GitHub class="size-5" />
+						Ver código
+					</a>
+					<a
+						href="https://link-draw.com"
+						target="_blank"
+						rel="noopener noreferrer"
+						class="inline-flex items-center gap-2 px-4 py-2 rounded-lg border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white font-medium hover:bg-gray-900 hover:text-white dark:hover:bg-white dark:hover:text-gray-900 transition-colors"
+					>
+						<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+							<path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+						</svg>
+						Ver sitio
+					</a>
+				</div>
+			</div>
+
+			<div class="rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-lg">
+				<img
+					src="/projects/link-draw.png"
+					alt="Link Draw - Captura de pantalla"
+					class="w-full"
+				/>
+			</div>
+		</SectionContainer>
+
+		<!-- Problema -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				El Problema
+			</h2>
+			<div class="prose dark:prose-invert max-w-none">
+				<p class="text-gray-600 dark:text-gray-400 leading-relaxed">
+					Las herramientas de diagramación tradicionales limitan la colaboración visual a un solo canvas. Cuando se trabaja en sistemas complejos o arquitecturas distribuidas, se necesita la capacidad de crear múltiples diagramas interconectados que mantengan referencias entre sí.
+				</p>
+			</div>
+		</SectionContainer>
+
+		<!-- Solución -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				La Solución
+			</h2>
+			<div class="prose dark:prose-invert max-w-none">
+				<p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
+					Link Draw permite crear múltiples canvas de dibujo enlazados entre sí, facilitando la documentación de sistemas complejos. Características principales:
+				</p>
+				<ul class="text-gray-600 dark:text-gray-400 space-y-2">
+					<li><strong>Multi-canvas enlazados</strong> - Crea referencias entre diferentes diagramas</li>
+					<li><strong>Basado en Excalidraw</strong> - Aprovecha la potencia de una biblioteca probada</li>
+					<li><strong>Colaboración en tiempo real</strong> - Múltiples usuarios trabajando simultáneamente</li>
+					<li><strong>Export/Import</strong> - Guarda y comparte tus diagramas fácilmente</li>
+				</ul>
+			</div>
+		</SectionContainer>
+
+		<!-- Desafíos -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				Desafíos Técnicos
+			</h2>
+			<div class="space-y-6">
+				<div class="border-l-4 border-purple-500 pl-4">
+					<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+						Sincronización entre canvas
+					</h3>
+					<p class="text-gray-600 dark:text-gray-400">
+						Implementar un sistema de enlaces bidireccionales que mantenga la consistencia cuando se modifican elementos referenciados en múltiples canvas.
+					</p>
+				</div>
+				
+				<div class="border-l-4 border-purple-500 pl-4">
+					<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+						Gestión de estado complejo
+					</h3>
+					<p class="text-gray-600 dark:text-gray-400">
+						Manejar el estado de múltiples instancias de Excalidraw de forma eficiente sin comprometer el rendimiento de la aplicación.
+					</p>
+				</div>
+			</div>
+		</SectionContainer>
+
+		<!-- Resultados -->
+		<SectionContainer>
+			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+				Características Destacadas
+			</h2>
+			<div class="grid md:grid-cols-3 gap-6">
+				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
+					<div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+						Intuitivo
+					</div>
+					<p class="text-gray-600 dark:text-gray-400">
+						Interfaz familiar basada en Excalidraw con funcionalidades extendidas
+					</p>
+				</div>
+				
+				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
+					<div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+						Flexible
+					</div>
+					<p class="text-gray-600 dark:text-gray-400">
+						Adapta tu flujo de trabajo con canvas ilimitados y enlaces personalizables
+					</p>
+				</div>
+				
+				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
+					<div class="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2">
+						Colaborativo
+					</div>
+					<p class="text-gray-600 dark:text-gray-400">
+						Trabaja en equipo con sincronización en tiempo real
+					</p>
+				</div>
+			</div>
+		</SectionContainer>
+
+		<!-- CTA -->
+		<SectionContainer>
+			<div class="bg-gradient-to-r from-purple-500/10 to-purple-600/10 dark:from-purple-500/20 dark:to-purple-600/20 rounded-xl p-8 border border-purple-500/20">
+				<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+					¿Interesado en colaborar?
+				</h2>
+				<p class="text-gray-600 dark:text-gray-400 mb-6">
+					Si tienes un proyecto similar o quieres discutir sobre desarrollo web y herramientas colaborativas, contáctame.
+				</p>
+				<a
+					href="mailto:eliseo.arev@gmail.com"
+					class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
+				>
+					Enviar mensaje
+				</a>
+			</div>
+		</SectionContainer>
+	</main>
+</Layout>
