@@ -11,12 +11,12 @@ interface Props {
   keywords?: string
 }
 
-const { description, title, image = '/eliseo.png', keywords = 'desarrollador fullstack, .net, javascript, react, astro, El Salvador' } = Astro.props
+const { description, title, image = '/eliseo.png', keywords = 'fullstack developer, .net, javascript, react, astro, el salvador, software engineer' } = Astro.props
 const canonicalURL = new URL(Astro.url.pathname, Astro.site)
 ---
 
 <!doctype html>
-<html lang="es">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -53,7 +53,7 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site)
         "@context": "https://schema.org",
         "@type": "Person",
         "name": "Eliseo Arévalo",
-        "jobTitle": "Desarrollador Fullstack",
+        "jobTitle": "Fullstack Developer",
         "url": "https://eliseo-arevalo.github.io",
         "sameAs": [
           "https://github.com/eliseo-arevalo",
