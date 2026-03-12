@@ -6,18 +6,18 @@ import GitHub from "@/components/icons/GitHub.astro"
 ---
 
 <Layout
-	title="ChivoMap - Mapa Interactivo de El Salvador | Eliseo Arévalo"
-	description="Aplicación de geolocalización para El Salvador con rutas de buses y puntos de interés. Desarrollada con React y Go."
+	title="ChivoMap - Interactive Map of El Salvador | Eliseo Arévalo"
+	description="Geolocation application for El Salvador with bus routes and points of interest. Built with React and Go."
 	image="/projects/chivomap-2.png"
 >
 	<main class="px-4">
 		<!-- Hero -->
 		<SectionContainer class="py-12">
-			<a href="/#proyectos" class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors">
+			<a href="/#projects" class="inline-flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white mb-6 transition-colors">
 				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
 				</svg>
-				Volver a proyectos
+				Back to projects
 			</a>
 
 			<div class="mb-8">
@@ -37,7 +37,7 @@ import GitHub from "@/components/icons/GitHub.astro"
 				</div>
 				
 				<p class="text-xl text-gray-600 dark:text-gray-400 mb-6">
-					El mapa de El Salvador | Rutas de buses y más
+					El Salvador's map | Bus routes and more
 				</p>
 
 				<div class="flex gap-4">
@@ -48,7 +48,7 @@ import GitHub from "@/components/icons/GitHub.astro"
 						class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
 					>
 						<GitHub class="size-5" />
-						Ver código
+						View Code
 					</a>
 					<a
 						href="https://chivomap.com"
@@ -59,7 +59,7 @@ import GitHub from "@/components/icons/GitHub.astro"
 						<svg class="size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
 						</svg>
-						Ver sitio
+						View Site
 					</a>
 				</div>
 			</div>
@@ -73,66 +73,66 @@ import GitHub from "@/components/icons/GitHub.astro"
 			</div>
 		</SectionContainer>
 
-		<!-- Problema -->
+		<!-- Problem -->
 		<SectionContainer>
 			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-				El Problema
+				The Problem
 			</h2>
 			<div class="prose dark:prose-invert max-w-none">
 				<p class="text-gray-600 dark:text-gray-400 leading-relaxed">
-					En El Salvador, la información sobre rutas de transporte público y la nueva distribución geopolítica del país no estaba centralizada ni era fácilmente accesible. Los usuarios necesitaban una herramienta moderna y visual para navegar por el territorio salvadoreño y planificar sus rutas.
+					In El Salvador, information about public transportation routes and the country's new geopolitical distribution wasn't centralized or easily accessible. Users needed a modern and visual tool to navigate Salvadoran territory and plan their routes.
 				</p>
 			</div>
 		</SectionContainer>
 
-		<!-- Solución -->
+		<!-- Solution -->
 		<SectionContainer>
 			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-				La Solución
+				The Solution
 			</h2>
 			<div class="prose dark:prose-invert max-w-none">
 				<p class="text-gray-600 dark:text-gray-400 leading-relaxed mb-4">
-					ChivoMap es una aplicación web de geolocalización que combina mapas interactivos con información de transporte público. La arquitectura utiliza:
+					ChivoMap is a geolocation web application that combines interactive maps with public transportation information. The architecture uses:
 				</p>
 				<ul class="text-gray-600 dark:text-gray-400 space-y-2">
-					<li><strong>Frontend en React</strong> - Interfaz dinámica y responsive con Leaflet para renderizado de mapas</li>
-					<li><strong>Backend en Go</strong> - API REST de alto rendimiento para servir datos geográficos</li>
-					<li><strong>Node.js</strong> - Procesamiento de datos y servicios auxiliares</li>
-					<li><strong>Leaflet</strong> - Biblioteca de mapas interactivos open source</li>
+					<li><strong>React Frontend</strong> - Dynamic and responsive interface with Leaflet for map rendering</li>
+					<li><strong>Go Backend</strong> - High-performance REST API to serve geographic data</li>
+					<li><strong>Node.js</strong> - Data processing and auxiliary services</li>
+					<li><strong>Leaflet</strong> - Open source interactive maps library</li>
 				</ul>
 			</div>
 		</SectionContainer>
 
-		<!-- Desafíos -->
+		<!-- Challenges -->
 		<SectionContainer>
 			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-				Desafíos Técnicos
+				Technical Challenges
 			</h2>
 			<div class="space-y-6">
 				<div class="border-l-4 border-yellow-500 pl-4">
 					<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-						Rendimiento con grandes volúmenes de datos
+						Performance with large data volumes
 					</h3>
 					<p class="text-gray-600 dark:text-gray-400">
-						Optimización de la carga y renderizado de múltiples capas de mapas con miles de puntos de interés y rutas de buses sin afectar la experiencia del usuario.
+						Optimizing the loading and rendering of multiple map layers with thousands of points of interest and bus routes without affecting user experience.
 					</p>
 				</div>
 				
 				<div class="border-l-4 border-yellow-500 pl-4">
 					<h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-						Integración de datos geográficos
+						Geographic data integration
 					</h3>
 					<p class="text-gray-600 dark:text-gray-400">
-						Procesamiento y normalización de datos de múltiples fuentes para crear una base de datos geográfica consistente y actualizada.
+						Processing and normalizing data from multiple sources to create a consistent and updated geographic database.
 					</p>
 				</div>
 			</div>
 		</SectionContainer>
 
-		<!-- Resultados -->
+		<!-- Results -->
 		<SectionContainer>
 			<h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
-				Impacto
+				Impact
 			</h2>
 			<div class="grid md:grid-cols-3 gap-6">
 				<div class="bg-white/50 dark:bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-gray-200 dark:border-white/10">
@@ -168,16 +168,16 @@ import GitHub from "@/components/icons/GitHub.astro"
 		<SectionContainer>
 			<div class="bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 dark:from-yellow-500/20 dark:to-yellow-600/20 rounded-xl p-8 border border-yellow-500/20">
 				<h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-					¿Interesado en colaborar?
+					Interested in collaborating?
 				</h2>
 				<p class="text-gray-600 dark:text-gray-400 mb-6">
-					Si tienes un proyecto similar o quieres discutir sobre desarrollo web y arquitectura de software, contáctame.
+					If you have a similar project or want to discuss web development and software architecture, contact me.
 				</p>
 				<a
 					href="mailto:eliseo.arev@gmail.com"
 					class="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-gray-900 dark:bg-white text-white dark:text-gray-900 font-medium hover:bg-gray-800 dark:hover:bg-gray-100 transition-colors"
 				>
-					Enviar mensaje
+					Send message
 				</a>
 			</div>
 		</SectionContainer>
