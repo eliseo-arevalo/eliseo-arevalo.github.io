@@ -1,0 +1,213 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import SectionContainer from '../../components/SectionContainer.astro';
+import { getCollection } from 'astro:content';
+import ExcalPreview from '../../components/ExcalPreview.tsx';
+
+// Parse sin normalizar (para URLs reales que acepta [...slug].astro)
+function parseNameRaw(base: string){
+    const m = base.split(/\s*-\s*|_/);
+    const grupo = (m[0] || '').trim();
+    const tema = (m.slice(1).join('-') || '').trim();
+    return { grupo, tema };
+}
+
+function titleFromElements(data: any, fallback: string){
+	try{
+		const els = (data?.elements || []) as any[];
+		const firstText = els.find(e => typeof e?.text === 'string' && e.text.trim().length);
+		const t = String(firstText?.text || '').trim();
+		if (t && t.length <= 100) return t;
+		return fallback;
+    }catch{ return ''; }
+}
+
+// MDX desde colección 'notas' (carpeta como grupo si existe)
+const notes = await getCollection('notas');
+const mdxItems = notes.map(p => {
+	const slugPath = p.slug; // ya es relativo a la colección sin extensión
+	const parts = slugPath.split('/');
+	const name = parts[parts.length - 1];
+	let group = 'general';
+	let temaFrom = name;
+	let segments: string[] = [];
+	if (parts.length > 1) {
+		group = parts[0];
+		segments = parts; // /blog/<grupo>/<...>
+	} else {
+		const { grupo, tema } = parseNameRaw(name);
+		group = grupo || 'general';
+		segments = [grupo, tema].filter(Boolean) as string[];
+	}
+	const url = `/blog/${segments.join('/') || name}`;
+	return {
+		type: 'mdx' as const,
+		group,
+		slug: segments.join('/') || name,
+		title: p.data.title || temaFrom,
+		description: p.data.description || `Article: ${temaFrom}`,
+		url,
+		date: p.data.pubDate?.valueOf?.() ?? 0,
+	};
+});
+
+// Excalidraw/JSON desde /src/content/notas/**
+const jsonModules = import.meta.glob('/src/content/notas/**/*.json', { eager: true });
+const excalModules = import.meta.glob('/src/content/notas/**/*.excalidraw', { eager: true, query: '?raw', import: 'default' });
+
+function fileBase(path: string){
+	const file = path.split('/').pop() || path;
+	return file.replace(/\.(json|excalidraw)$/i,'');
+}
+
+const excalFromJson = Object.entries(jsonModules).map(([filePath, mod]) => {
+	const rel = filePath.replace(/.*\/src\/content\/notas\//,'');
+	const segs = rel.split('/');
+	const fileBaseName = fileBase(segs[segs.length - 1]);
+	const fromName = parseNameRaw(fileBaseName);
+	const groupFolder = segs.length > 1 ? segs[0] : '';
+	const group = groupFolder || fromName.grupo || 'general';
+	const tema = fromName.tema || fileBaseName;
+	const segments = groupFolder ? [group, tema].filter(Boolean) as string[] : [fromName.grupo, tema].filter(Boolean) as string[];
+    const derived = (tema || fileBaseName).replace(/-/g, ' ');
+	const data: any = (mod as any)?.default ?? (mod as any);
+	const usedTitle = titleFromElements(data, derived);
+	const desc = (data && typeof data.description === 'string' && data.description.trim().length)
+		? data.description
+		: `Diagram: ${derived}`;
+	const preview = JSON.stringify({ elements: data?.elements || [], appState: data?.appState || {}, files: data?.files || null });
+	return {
+		type: 'excalidraw' as const,
+		group,
+		slug: segments.join('/') || fileBaseName,
+		title: usedTitle,
+		description: desc,
+		preview,
+		url: `/blog/${segments.length ? segments.join('/') : fileBaseName}`,
+		date: 0,
+	};
+});
+
+const excalFromRaw = Object.entries(excalModules).map(([filePath, rawContent]) => {
+	const rel = filePath.replace(/.*\/src\/content\/notas\//,'');
+	const segs = rel.split('/');
+	const fileBaseName = fileBase(segs[segs.length - 1]);
+	const fromName = parseNameRaw(fileBaseName);
+	const groupFolder = segs.length > 1 ? segs[0] : '';
+	const group = groupFolder || fromName.grupo || 'general';
+	const tema = fromName.tema || fileBaseName;
+	const segments = groupFolder ? [group, tema].filter(Boolean) as string[] : [fromName.grupo, tema].filter(Boolean) as string[];
+    const derived = (tema || fileBaseName).replace(/-/g, ' ');
+	let data: any = {};
+	try { data = JSON.parse(rawContent as string); } catch {}
+	const usedTitle = titleFromElements(data, derived);
+	const desc = (data && typeof data.description === 'string' && data.description.trim().length)
+		? data.description
+		: `Diagram: ${derived}`;
+	const preview = JSON.stringify({ elements: data?.elements || [], appState: data?.appState || {}, files: data?.files || null });
+	return {
+		type: 'excalidraw' as const,
+		group,
+		slug: segments.join('/') || fileBaseName,
+		title: usedTitle,
+		description: desc,
+		preview,
+		url: `/blog/${segments.length ? segments.join('/') : fileBaseName}`,
+		date: 0,
+	};
+});
+
+type Item = {
+  type: 'mdx' | 'excalidraw';
+  group: string;
+  slug: string;
+  title: string;
+  description: string;
+  url: string;
+  date: number;
+  preview?: string;
+};
+
+// Create chronological list of all items
+const allItems = [...mdxItems, ...excalFromJson, ...excalFromRaw]
+  .sort((a, b) => b.date - a.date); // Most recent first
+---
+
+<Layout title="Blog | Eliseo Arévalo" description="Thoughts on software development, architecture, and building systems that work.">
+    <main class="px-4">
+        <SectionContainer class="mt-16" data-notes-root>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-gray-100">Blog</h1>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">
+                Thoughts on software development, architecture, and building systems that work
+            </p>
+
+            <div class="mt-8">
+                {allItems.length > 0 ? (
+                    <>
+                        {/* Featured Post */}
+                        <article class="mb-8 overflow-hidden">
+                            <a href={allItems[0].url} class="group block relative overflow-hidden p-4 rounded-lg border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-white/50 dark:hover:bg-white/5 transition-all">
+                                {allItems[0].type === 'excalidraw' && allItems[0].preview && (
+                                    <div class="absolute -right-4 top-0 w-2/5 h-full opacity-10 dark:opacity-5 scale-[2] -rotate-12 origin-top">
+                                        <ExcalPreview client:only="react" data={allItems[0].preview} height={120} />
+                                    </div>
+                                )}
+                                <div class="relative z-10">
+                                    <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+                                        {allItems[0].title}
+                                    </h3>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+                                        {allItems[0].description}
+                                    </p>
+                                    <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                        <span class="capitalize px-2 py-0.5 bg-gray-100 dark:bg-white/10 rounded text-[10px]">
+                                            {allItems[0].group}
+                                        </span>
+                                        <span class="text-[10px]">{allItems[0].type === 'excalidraw' ? 'Visual' : 'Article'}</span>
+                                        <time class="text-[10px]">{allItems[0].date > 0 ? new Date(allItems[0].date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recent'}</time>
+                                    </div>
+                                </div>
+                            </a>
+                        </article>
+
+                        {/* Posts List */}
+                        {allItems.slice(1).length > 0 && (
+                            <div class="space-y-2">
+                                {allItems.slice(1).map((item) => (
+                                    <article class="group overflow-hidden">
+                                        <a href={item.url} class="block relative overflow-hidden p-4 rounded-lg border border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-white/50 dark:hover:bg-white/5 transition-all">
+                                            {item.type === 'excalidraw' && item.preview && (
+                                                <div class="absolute -right-4 top-0 w-2/5 h-full opacity-10 dark:opacity-5 scale-[2] -rotate-12 origin-top">
+                                                    <ExcalPreview client:only="react" data={item.preview} height={120} />
+                                                </div>
+                                            )}
+                                            <div class="relative z-10">
+                                                <h3 class="text-base font-semibold text-gray-900 dark:text-white mb-1 group-hover:text-yellow-600 dark:group-hover:text-yellow-400 transition-colors">
+                                                    {item.title}
+                                                </h3>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 mb-2 line-clamp-1">
+                                                    {item.description}
+                                                </p>
+                                                <div class="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                                                    <span class="capitalize px-2 py-0.5 bg-gray-100 dark:bg-white/10 rounded text-[10px]">
+                                                        {item.group}
+                                                    </span>
+                                                    <span class="text-[10px]">{item.type === 'excalidraw' ? 'Visual' : 'Article'}</span>
+                                                    <time class="text-[10px]">{item.date > 0 ? new Date(item.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Recent'}</time>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </article>
+                                ))}
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <div class="text-center py-12">
+                        <p class="text-gray-500 dark:text-gray-400">No posts yet. Coming soon!</p>
+                    </div>
+                )}
+            </div>
+        </SectionContainer>
+    </main>
+</Layout>

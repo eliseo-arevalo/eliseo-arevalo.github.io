@@ -91,20 +91,44 @@ if (kind === 'mdx') {
 
 <Layout title={`Nota | ${title}`} description={description}>
   {kind === 'mdx' ? (
-    <SectionContainer class="mt-16">
-      <article class="prose dark:prose-invert lg:prose-lg">
-        <!-- <ExportButtons client:only="react" title={title} /> -->
-        <h1>{title}</h1>
-        {pubDate && (
-          <div class="text-gray-500 mb-8">
-            <time datetime={pubDate.toISOString()}>
-              {pubDate.toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' })}
-            </time>
-          </div>
-        )}
-        <Content />
-      </article>
-    </SectionContainer>
+    <>
+      <!-- BlogPosting Schema for MDX posts -->
+      <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": title,
+        "description": description,
+        "author": {
+          "@type": "Person",
+          "name": "Eliseo Arévalo",
+          "url": "https://eliseo-arevalo.github.io"
+        },
+        "datePublished": pubDate?.toISOString(),
+        "dateModified": pubDate?.toISOString(),
+        "publisher": {
+          "@type": "Person",
+          "name": "Eliseo Arévalo"
+        },
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": `https://eliseo-arevalo.github.io${Astro.url.pathname}`
+        }
+      })} />
+      <SectionContainer class="mt-16">
+        <article class="prose dark:prose-invert lg:prose-lg">
+          <!-- <ExportButtons client:only="react" title={title} /> -->
+          <h1>{title}</h1>
+          {pubDate && (
+            <div class="text-gray-500 mb-8">
+              <time datetime={pubDate.toISOString()}>
+                {pubDate.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+              </time>
+            </div>
+          )}
+          <Content />
+        </article>
+      </SectionContainer>
+    </>
   ) : (
     <SectionContainer class="mt-16">
       <article>

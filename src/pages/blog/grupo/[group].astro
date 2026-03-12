@@ -91,7 +91,7 @@ const mdxItems = notes.map(p => {
     group = grupo || 'general';
     segments = [grupo, tema].filter(Boolean) as string[];
   }
-  const url = `/notas/${segments.join('/') || name}`;
+  const url = `/blog/${segments.join('/') || name}`;
   return {
     type: 'mdx' as const,
     group,
@@ -134,7 +134,7 @@ const excalFromJson = Object.entries(jsonModules).map(([filePath, mod]) => {
     title: usedTitle,
     description: desc,
     preview,
-    url: `/notas/${segments.length ? segments.join('/') : fileBaseName}`,
+    url: `/blog/${segments.length ? segments.join('/') : fileBaseName}`,
     date: 0,
   };
 });
@@ -163,7 +163,7 @@ const excalFromRaw = Object.entries(excalModules).map(([filePath, raw]) => {
     title: usedTitle,
     description: desc,
     preview,
-    url: `/notas/${segments.length ? segments.join('/') : fileBaseName}`,
+    url: `/blog/${segments.length ? segments.join('/') : fileBaseName}`,
     date: 0,
   };
 });

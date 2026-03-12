@@ -1,0 +1,111 @@
+---
+title: "Simple vs Complex: A Developer's Dilemma"
+description: "Why I choose boring solutions over clever ones"
+pubDate: 2026-01-15
+---
+
+I've been coding for 4 years, and I've learned something important: **the best code is boring code**.
+
+This might sound counterintuitive. We're developers. We love clever solutions, elegant patterns, and showing off our technical skills. But here's the thing—clever code is expensive.
+
+## The Real Cost of Clever
+
+Last year, I inherited a project with this gem:
+
+```javascript
+const processUsers = users => users
+  .filter(u => u.active)
+  .reduce((acc, u) => ({
+    ...acc,
+    [u.role]: [...(acc[u.role] || []), u]
+  }), {})
+  .pipe(groupedUsers => 
+    Object.entries(groupedUsers)
+      .map(([role, users]) => ({ role, count: users.length }))
+  );
+```
+
+Clever? Absolutely. Functional programming at its finest. One-liner magic.
+
+Maintainable? Hell no.
+
+It took me 20 minutes to understand what it does. It groups active users by role and counts them. That's it.
+
+## The Boring Version
+
+```javascript
+function getUserCountsByRole(users) {
+  const activeUsers = users.filter(user => user.active);
+  const usersByRole = {};
+  
+  for (const user of activeUsers) {
+    if (!usersByRole[user.role]) {
+      usersByRole[user.role] = [];
+    }
+    usersByRole[user.role].push(user);
+  }
+  
+  const roleCounts = [];
+  for (const [role, roleUsers] of Object.entries(usersByRole)) {
+    roleCounts.push({ role, count: roleUsers.length });
+  }
+  
+  return roleCounts;
+}
+```
+
+Boring? Yes. Verbose? Maybe. But:
+- Any junior developer can understand it
+- It's easy to debug
+- You can add logging between steps
+- It's testable in parts
+
+## Why I Choose Boring
+
+**1. Future me is not as smart as current me**
+
+That clever solution I wrote at 2 AM? Future me will hate it. And future me is the one who has to fix bugs.
+
+**2. Teams change**
+
+The brilliant developer who wrote that functional masterpiece left the company. Now what? The new hire spends days deciphering code instead of adding features.
+
+**3. Debugging is twice as hard as writing**
+
+If you write code at the limit of your cleverness, you're not smart enough to debug it.
+
+## When Clever Makes Sense
+
+Don't get me wrong. There's a place for clever solutions:
+
+- **Performance critical paths** - Sometimes you need that optimized algorithm
+- **Library code** - Hide complexity behind simple APIs
+- **Domain-specific problems** - Complex business rules might need complex code
+
+But 90% of the time? Boring wins.
+
+## My New Rules
+
+1. **Write code for humans, not computers**
+2. **Optimize for readability first, performance second**
+3. **If it needs a comment to explain what it does, rewrite it**
+4. **Choose explicit over implicit**
+5. **Prefer composition over inheritance**
+
+## The Paradox
+
+The most experienced developers write the simplest code. Not because they can't write complex solutions, but because they've learned the true cost of complexity.
+
+Complexity is debt. And like financial debt, it compounds over time.
+
+## Final Thought
+
+Next time you're about to write something clever, ask yourself:
+
+*"Will the person maintaining this code (probably future me) thank me or curse me?"*
+
+Choose boring. Your future self will thank you.
+
+---
+
+*This is part of my ongoing series about software development philosophy. More thoughts coming soon.*
